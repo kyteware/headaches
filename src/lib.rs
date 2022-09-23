@@ -1,6 +1,6 @@
 pub mod interpret;
 
-pub use interpret::{run, run_from_state};
+pub use interpret::{run, run_from_state, parse, execute};
 
 /// A `Vec` of `u8`s representing a the memory
 /// of a Brainfuck process.
@@ -28,6 +28,7 @@ impl State {
 }
 
 /// A Brainfuck instruction.
+#[derive(Debug)]
 pub enum Instruction {
     /// Represents the `+` instruction.
     /// 
@@ -66,20 +67,33 @@ pub enum Instruction {
     In
 }
 
-impl Instruction {
+
+#[derive(Debug)]
+pub struct TryFromCharError;
+
+impl std::fmt::Display for TryFromCharError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Could not convert from a `char`.")
+    }
+}
+
+impl std::error::Error for TryFromCharError {}
+
+impl TryFrom<char> for Instruction {
+    type Error = TryFromCharError;
     /// Parses a character into a Brainfuck instruction.
     /// 
     /// If the input is not an instruction, 
-    pub fn from_char (c: char) -> Option<Self> {
+    fn try_from (c: char) -> Result<Self, TryFromCharError> {
         use Instruction::*;
-        Some(match c {
+        Ok(match c {
             '+' => Increment,
             '-' => Decrement,
             '>' => Forward,
             '<' => Backward,
             '[' => Loop(vec![]),
             ']' => LoopEnd,
-            _ => { return None }
+            _ => { return Err(TryFromCharError) }
         })
     }
 }

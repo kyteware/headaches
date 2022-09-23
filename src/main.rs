@@ -1,5 +1,7 @@
 use clap::Parser;
 
+use bf::parse;
+
 /// A brainfuck interpreter.
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
@@ -18,8 +20,7 @@ struct Cli {
 fn main() {
     let cli = Cli::parse();
 
-    println!(
-        "filename: {:?}\nreveal: {:?}\nreveal_all: {:?}", 
-        cli.filename, cli.reveal, cli.reveal_all
-    )
+    let parsed = parse(&String::from("+[->>[__]><-]..,"));
+
+    println!("{:?}", parsed)
 }
