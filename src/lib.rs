@@ -93,6 +93,8 @@ impl TryFrom<char> for Instruction {
             '<' => Backward,
             '[' => Loop(vec![]),
             ']' => LoopEnd,
+            '.' => Out,
+            ',' => In,
             _ => { return Err(TryFromCharError) }
         })
     }

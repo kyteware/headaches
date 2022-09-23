@@ -20,7 +20,7 @@ struct Cli {
 fn main() {
     let cli = Cli::parse();
 
-    let parsed = parse(&String::from("+[->>[__]><-]..,"));
+    let parsed = parse(&String::from("+[->>[--]><-]++[>>>]..,"));
 
     println!("{:?}", parsed)
 }
