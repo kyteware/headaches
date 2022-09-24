@@ -1,8 +1,9 @@
 use std::path::PathBuf;
+use std::io;
 
 use clap::Parser;
 
-use bf::{run, run_from_state};
+use bf::{run, run_from_state, State};
 
 /// A brainfuck interpreter.
 #[derive(Parser, Debug)]
@@ -24,12 +25,17 @@ fn main() {
 
     match cli.filename {
         Some(fp) => {
-            // INTERPRET FILE
+            todo!()
         }
         None => {
-            let finished = run(&String::from("+++>>>---.,"));
-
-            println!("{:?}", finished)
+            let mut state = State::new();
+            loop {
+                let mut raw = String::new();
+                io::stdin()
+                    .read_line(&mut raw)
+                    .expect("could not read input");
+                run_from_state(&raw, &mut state)
+            }
         }
     }
 }

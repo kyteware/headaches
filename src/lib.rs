@@ -54,9 +54,11 @@ impl State {
                 }
             }
             Instruction::LoopEnd => {}
-            Instruction::Out => print!("{}", char::from(self.mem[self.pointer])),
-            Instruction::In => {
+            Instruction::Out => {
+                print!("{}", char::from(self.mem[self.pointer]));
                 stdout().flush();
+            },
+            Instruction::In => {
                 if let Some(Ok(c)) = stdin().bytes().next() {
                     self.mem[self.pointer] = c
                 }
