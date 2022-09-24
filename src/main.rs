@@ -27,7 +27,7 @@ fn main() {
             // INTERPRET FILE
         }
         None => {
-            let finished = run(&String::from("+++>>>---"));
+            let finished = run(&String::from("+++>>>---.,"));
 
             println!("{:?}", finished)
         }

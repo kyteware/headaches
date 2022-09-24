@@ -1,3 +1,5 @@
+use std::io::{stdin, Read, Write, stdout};
+
 pub mod interpret;
 
 pub use interpret::{execute, parse, run, run_from_state};
@@ -26,6 +28,7 @@ impl State {
             pointer: 0,
         }
     }
+    #[allow(unused_must_use)]
     pub fn run(&mut self, instruction: &Instruction) {
         match instruction {
             Instruction::Increment => {
@@ -51,8 +54,13 @@ impl State {
                 }
             }
             Instruction::LoopEnd => {}
-            Instruction::Out => todo!(),
-            Instruction::In => todo!(),
+            Instruction::Out => print!("{}", char::from(self.mem[self.pointer])),
+            Instruction::In => {
+                stdout().flush();
+                if let Some(Ok(c)) = stdin().bytes().next() {
+                    self.mem[self.pointer] = c
+                }
+            }
         }
     }
 }
