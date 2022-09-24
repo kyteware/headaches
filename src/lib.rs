@@ -18,6 +18,10 @@ pub struct State {
     pub mem: Memory,
     /// The location of the pointer.
     pub pointer: Pointer,
+    /// Whether the process has outputted.
+    /// 
+    /// Used for repl
+    pub outted: bool,
 }
 
 impl State {
@@ -26,6 +30,7 @@ impl State {
         Self {
             mem: vec![0],
             pointer: 0,
+            outted: false
         }
     }
     #[allow(unused_must_use)]
@@ -49,12 +54,18 @@ impl State {
                 }
             }
             Instruction::Loop(inners) => {
-                for inner in inners {
-                    self.run(inner)
+                loop {
+                    for inner in inners {
+                        self.run(inner)
+                    }
+                    if self.mem[self.pointer] == 0 {
+                        break
+                    }
                 }
             }
             Instruction::LoopEnd => {}
             Instruction::Out => {
+                self.outted = true;
                 print!("{}", char::from(self.mem[self.pointer]));
                 stdout().flush();
             },

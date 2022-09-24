@@ -25,7 +25,6 @@ pub fn parse(raw: &String) -> Vec<Instruction> {
 fn parse_loop(chars: &mut Chars, inners: &mut Vec<Instruction>) {
     while let Some(c) = chars.next() {
         if let Some(instruction) = Instruction::try_from(c).ok() {
-            // Iterating through characters now
             match instruction {
                 Instruction::Loop(mut local_inners) => {
                     parse_loop(chars, &mut local_inners);
