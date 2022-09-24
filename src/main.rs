@@ -15,8 +15,8 @@ struct Cli {
     #[clap(short, long)]
     reveal: bool,
     /// Reveal all memory after each repl input
-    #[clap(short='R', long, requires = "filename", conflicts_with = "reveal")]
-    reveal_all: bool
+    #[clap(short = 'R', long, requires = "filename", conflicts_with = "reveal")]
+    reveal_all: bool,
 }
 
 fn main() {
@@ -25,12 +25,11 @@ fn main() {
     match cli.filename {
         Some(fp) => {
             // INTERPRET FILE
-        },
+        }
         None => {
             let finished = run(&String::from("+++>>>---"));
 
             println!("{:?}", finished)
-        },
+        }
     }
-    
 }

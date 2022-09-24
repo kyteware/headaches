@@ -1,9 +1,9 @@
 use std::str::Chars;
 
-use crate::{State, Instruction};
+use crate::{Instruction, State};
 
 /// Parses raw Brainfuck code into list of instructions.
-/// 
+///
 /// Ignores characters not in the Brainfuck language.
 pub fn parse(raw: &String) -> Vec<Instruction> {
     let mut instructions = vec![];
@@ -17,13 +17,12 @@ pub fn parse(raw: &String) -> Vec<Instruction> {
             } else {
                 instructions.push(instruction)
             }
-            
         }
     }
     instructions
 }
 
-fn parse_loop (chars: &mut Chars, inners: &mut Vec<Instruction>) {
+fn parse_loop(chars: &mut Chars, inners: &mut Vec<Instruction>) {
     while let Some(c) = chars.next() {
         if let Some(instruction) = Instruction::try_from(c).ok() {
             // Iterating through characters now
@@ -31,25 +30,34 @@ fn parse_loop (chars: &mut Chars, inners: &mut Vec<Instruction>) {
                 Instruction::Loop(mut local_inners) => {
                     parse_loop(chars, &mut local_inners);
                     inners.push(Instruction::Loop(local_inners));
-                },
-                Instruction::LoopEnd => { break; },
-                _ => inners.push(instruction)
+                }
+                Instruction::LoopEnd => {
+                    break;
+                }
+                _ => inners.push(instruction),
             }
         }
     }
 }
 
 /// Executes a list of Brainfuck instructions.
-pub fn execute(instructions: Vec<Instruction>) -> State {
-    todo!()
+pub fn execute(state: &mut State, instructions: &Vec<Instruction>) {
+    for instruction in instructions {
+        state.run(instruction);
+    }
 }
 
 /// Run Brainfuck code.
 pub fn run(raw: &String) -> State {
-    run_from_state(raw, State::new())
+    let mut state = State::new();
+    run_from_state(raw, &mut state);
+    state
 }
 
 /// Run Brainfuck code from a previous state.
-pub fn run_from_state(raw: &String, previous: State) -> State {
-    todo!()
+pub fn run_from_state(raw: &String, state: &mut State) {
+    let code = parse(raw);
+    for instruction in code {
+        state.run(&instruction)
+    }
 }
