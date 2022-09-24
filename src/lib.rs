@@ -7,9 +7,10 @@ pub use interpret::{run, run_from_state, parse, execute};
 pub type Memory = Vec<u8>;
 /// The pointer that indicates the selected cell 
 /// of a Brainfuck process.
-pub type Pointer = u32;
+pub type Pointer = usize;
 
 /// The state of a Brainfuck process.
+#[derive(Debug)]
 pub struct State {
     /// The process's memory.
     pub mem: Memory,
@@ -24,6 +25,9 @@ impl State {
             mem: Memory::new(),
             pointer: 0
         }
+    }
+    pub fn run(instruction: &Instruction) {
+        todo!()
     }
 }
 
