@@ -1,4 +1,4 @@
-# Headaches (WIP)
+# Headaches
 A classical minimalist Brainfuck interpreter.
 
 Building an interpreter has always been something I wanted to try. Brainfuck is an extremely simple language, composed of only
