@@ -1,8 +1,12 @@
 use std::io::{stdin, stdout, Read, Write};
 
+pub mod compat;
 pub mod interpret;
 
+use compat::from_char_8859;
 pub use interpret::{execute, parse, run, run_from_state};
+
+pub use compat::to_char_8859;
 
 /// A `Vec` of `u8`s representing a the memory
 /// of a Brainfuck process.
@@ -64,12 +68,14 @@ impl State {
             Instruction::LoopEnd => {}
             Instruction::Out => {
                 self.outted = true;
-                print!("{}", char::from(self.mem[self.pointer]));
+                print!("{}", to_char_8859(self.mem[self.pointer]));
                 stdout().flush();
             }
             Instruction::In => {
                 if let Some(Ok(c)) = stdin().bytes().next() {
-                    self.mem[self.pointer] = c
+                    let b = from_char_8859(c as char);
+                    self.mem[self.pointer] = b;
+                    self.outted = true;
                 }
             }
         }

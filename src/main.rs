@@ -33,17 +33,17 @@ fn main() {
         None => {
             let mut state = State::new();
             loop {
-                if state.outted == true {
-                    println!("");
-                    state.outted = false;
-                }
                 print!(">>> ");
                 stdout().flush();
                 let mut raw = String::new();
                 stdin().read_line(&mut raw).expect("could not read input");
                 run_from_state(&raw, &mut state);
+                if state.outted == true {
+                    println!("");
+                    state.outted = false;
+                }
                 if cli.reveal {
-                    println!("{:?}", state);
+                    print!("{:?}\n", state);
                     stdout().flush();
                 }
             }
