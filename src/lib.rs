@@ -1,4 +1,4 @@
-use std::io::{stdin, Read, Write, stdout};
+use std::io::{stdin, stdout, Read, Write};
 
 pub mod interpret;
 
@@ -19,7 +19,7 @@ pub struct State {
     /// The location of the pointer.
     pub pointer: Pointer,
     /// Whether the process has outputted.
-    /// 
+    ///
     /// Used for repl
     pub outted: bool,
 }
@@ -30,7 +30,7 @@ impl State {
         Self {
             mem: vec![0],
             pointer: 0,
-            outted: false
+            outted: false,
         }
     }
     #[allow(unused_must_use)]
@@ -53,22 +53,20 @@ impl State {
                     self.pointer -= 1;
                 }
             }
-            Instruction::Loop(inners) => {
-                loop {
-                    for inner in inners {
-                        self.run(inner)
-                    }
-                    if self.mem[self.pointer] == 0 {
-                        break
-                    }
+            Instruction::Loop(inners) => loop {
+                for inner in inners {
+                    self.run(inner)
                 }
-            }
+                if self.mem[self.pointer] == 0 {
+                    break;
+                }
+            },
             Instruction::LoopEnd => {}
             Instruction::Out => {
                 self.outted = true;
                 print!("{}", char::from(self.mem[self.pointer]));
                 stdout().flush();
-            },
+            }
             Instruction::In => {
                 if let Some(Ok(c)) = stdin().bytes().next() {
                     self.mem[self.pointer] = c

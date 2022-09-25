@@ -1,9 +1,9 @@
-use std::{path::PathBuf, fs::read_to_string};
-use std::io::{stdout, Write, stdin};
+use std::io::{stdin, stdout, Write};
+use std::{fs::read_to_string, path::PathBuf};
 
 use clap::Parser;
 
-use bf::{run, run_from_state, State};
+use headaches::{run, run_from_state, State};
 
 /// A brainfuck interpreter.
 #[derive(Parser, Debug)]
@@ -14,7 +14,7 @@ struct Cli {
     filename: Option<PathBuf>,
     /// Reveal all memory after running (prints each time on repl).
     #[clap(short, long)]
-    reveal: bool
+    reveal: bool,
 }
 
 #[allow(unused_must_use)]
@@ -40,9 +40,7 @@ fn main() {
                 print!(">>> ");
                 stdout().flush();
                 let mut raw = String::new();
-                stdin()
-                    .read_line(&mut raw)
-                    .expect("could not read input");
+                stdin().read_line(&mut raw).expect("could not read input");
                 run_from_state(&raw, &mut state);
                 if cli.reveal {
                     println!("{:?}", state);
